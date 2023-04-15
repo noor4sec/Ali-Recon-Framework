@@ -104,7 +104,7 @@ cat $target/recon/live-subs.txt | wc -l
 echo "[+]Enumurating Params From Paramspider...." 
 python3 /opt/ParamSpider/paramspider.py --level high -d $target -p khalid -o $1/recon/test-params.txt
 echo "[+]Enumurating Params From Waybackurls...." 
-cat $1/recon/live-subs.txt | waybackurls | grep = | qsreplace khalid | sort -u >> $1/recon/test-params.txt
+cat $target/recon/live-subs.txt | waybackurls | grep = | qsreplace khalid | sort -u >> $1/recon/test-params.txt
 echo "[+]Enumurating Params From gau Tool...." 
 gau --subs  $target  | grep = | qsreplace khalid  >> $1/recon/test-params.txt
 echo "[+]Enumurating Params From gauPlus Tool...." 
@@ -113,7 +113,7 @@ echo "[+]Enumurating Params Using Katana Tool...."
 cat $target/recon/subdomins-with-http.txt | katana -d 50 | grep = | qsreplace khalid  >> $1/recon/test-params.txt
 
 echo "[+]Filtering Dups..." 
-cat $1/recon/test-params.txt | sort -u >> tee $target/recon/final-params.txt 
+cat $1/recon/test-params.txt | sort -u >> $target/recon/final-params.txt 
 rm $1/recon/test-params.txt 
 
 echo "[+]Filtering Main Parameters With Uro by S0mDev...." 
