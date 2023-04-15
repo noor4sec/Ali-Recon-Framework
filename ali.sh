@@ -49,7 +49,7 @@ echo "[+]Lets Start With Recon...."
 #-----------------------------Finding SubDomains----------------------------------
 #----------------------------------------------------------------------------------
 echo "[+]Enumurating SubDomains Using Amass..." 
-#amass enum -d $target >> $target/recon/subs.txt
+amass enum -d $target >> $target/recon/subs.txt
 
 echo "[+]Enumurating SubDomains Using Assetfinder..." 
 assetfinder $target >> $target/recon/subs.txt
@@ -110,7 +110,7 @@ gau --subs  $target  | grep = | qsreplace khalid  >> $1/recon/test-params.txt
 echo "[+]Enumurating Params From gauPlus Tool...." 
 cat $target/recon/live-subs.txt | gauplus | grep = | qsreplace khalid  >> $1/recon/test-params.txt
 echo "[+]Enumurating Params Using Katana Tool...."
-cat $target/recon/subdomins-with-http.txt | katana -d 50 | grep = | qsreplace khalid  >> $1/recon/test-params.txt
+cat $target/recon/subdomins-with-http.txt | katana -d 75 | grep = | qsreplace khalid  >> $1/recon/test-params.txt
 
 echo "[+]Filtering Dups..." 
 cat $1/recon/test-params.txt | sort -u >> $target/recon/final-params.txt 
