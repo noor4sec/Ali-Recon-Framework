@@ -230,7 +230,12 @@ cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/wor
 cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/sap-redirect_nagli.yaml -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
 cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/wappalyzer-mapping.yml -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
 echo "[+]Sending Nuclei Results To Notify" | notify
-cat $1/subs-vuln/nuclei.txt | notify
+cat $1/subs-vuln/nuclei.txt | grep low |  notify
+cat $1/subs-vuln/nuclei.txt | grep medium |  notify
+cat $1/subs-vuln/nuclei.txt | grep high |  notify
+cat $1/subs-vuln/nuclei.txt | grep critical |  notify
+cat $1/subs-vuln/nuclei.txt | grep unknown |  notify
+cat $1/subs-vuln/nuclei.txt | grep network |  notify
 #--------------------------------------------------------------------------------------------------
 #-------------------------------------Full Scan With Nikto----------------------------------------
 #--------------------------------------------------------------------------------------------------
