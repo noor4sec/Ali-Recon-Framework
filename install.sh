@@ -37,16 +37,16 @@ chmod +x findomain
 sudo mv findomain /usr/bin/findomain
 findomain --help
 echo "[+] Installing Amass......." 
-go install -v github.com/OWASP/Amass/v3/...@master
+go install -v github.com/owasp-amass/amass/v3/...@master
 cp /root/go/bin/amass /usr/local/bin/
 echo "[+] Installing SubList3r........." 
-git clone https://github.com/aboul3la/sublist3r.git 
-mv sublist3r /opt/
-pip3 install -r /opt/sublist3r/requirements.txt
+https://github.com/aboul3la/Sublist3r.git
+mv Sublist3r /opt/
+pip3 install -r /opt/Sublist3r/requirements.txt
 #---------------------------------------------------------------------------------------------------------------------
 #------------------------------------------Installing Url Crawlers ---------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------
-echo "[+] Installing Waybackurls....." | lolcat
+echo "[+] Installing Waybackurls....." 
 go install github.com/tomnomnom/waybackurls@latest
 cp /root/go/bin/waybackurls /usr/local/bin/
 echo "[+] Installing Katana....." 
@@ -59,9 +59,9 @@ echo "[+] Installing gauplus........" | lolcat
 go install github.com/bp0lr/gauplus@latest
 cp /root/go/bin/gauplus /usr/local/bin/
 echo "[+] Installing Paramspider......" | lolcat
-git clone https://github.com/devanshbatham/paramspider.git
-mv paramspider /opt/
-pip3 install -r /opt/paramspider/requirements.txt
+git clone https://github.com/devanshbatham/ParamSpider
+mv ParamSpider /opt/
+pip3 install -r /opt/ParamSpider/requirements.txt
 #---------------------------------------------------------------------------------------------------------------------
 #--------------------------------------Installing Subs Live Checker---------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------
@@ -81,30 +81,15 @@ mv sqlmap /opt/
 echo "Installing qsreplace....." | lolcat
 go install github.com/tomnomnom/qsreplace@latest
 cp /root/go/bin/qsreplace /usr/local/bin/
-echo "[+] Installing ffuf" | lolcat
-go install github.com/ffuf/ffuf@latest
-cp /root/go/bin/ffuf /usr/local/bin/
-echo "[+] Installing gf Patterns" | lolcat
-go install github.com/tomnomnom/gf@latest
-cp /root/go/bin/gf /usr/local/bin/
-echo "[+] Installing Dalfox..." | lolcat
-go install github.com/hahwul/dalfox/v2@latest
-cp /root/go/bin/dalfox /usr/local/bin/
-echo "[+] Installing Gxss....." | lolcat
-go install github.com/KathanP19/Gxss@latest
-cp /root/go/bin/dalfox /usr/local/bin/
-echo "[+] Installing kxss....." | lolcat
-go install github.com/Emoe/kxss@latest
-cp /root/go/bin/dalfox /usr/local/bin/
-git clone https://github.com/projectdiscovery/fuzzing-templates.git
+
 echo "Installing Nuclei...."
 go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
 cp /root/go/bin/nuclei /usr/local/bin
 nuclei 
+nuclei --update
 echo "Installing Fuzzing Templates...."
 git clone https://github.com/projectdiscovery/fuzzing-templates.git
 mv fuzzing-templates /root/
 echo "Installing Notify...."
 go install -v github.com/projectdiscovery/notify/cmd/notify@latest
 cp /root/go/bin/notify /usr/local/bin/
-echo "Installing Clfuzz...."
