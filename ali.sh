@@ -16,32 +16,13 @@ _  ___   _    _    _     ___ ____        ____  _____ ____ ___  _   _
                                                               
 "
 echo "        @Khalid Cyber Security"
+echo " Bug Bounty Based FrameWork"
 
 if [ ! -d "$target" ]; then
       mkdir $target
 fi
 if [ ! -d "$target/recon" ]; then
       mkdir $target/recon
-fi
-
-if [ ! -d "$target/params-vuln" ]; then
-          mkdir $target/params-vuln
-fi
-
-if [ ! -d "$target/subs-vuln" ]; then
-          mkdir $target/subs-vuln
-fi
-
-if [ ! -d "$target/subs-vuln/false-positive" ]; then
-          mkdir $target/subs-vuln/false-positive
-fi
-
-if [ ! -d "$target/params-vuln/false-positive" ]; then
-          mkdir $target/params-vuln/false-positive
-fi
-
-if [ ! -d "$target/recon/false-positive" ]; then
-          mkdir $target/recon/false-positive
 fi
 
 echo "[+]Lets Start With Recon...."
@@ -129,15 +110,15 @@ cat $target/recon/main-params.txt | wc -l
 #-------------------------------Fuzzing For Open Redirects----------------------------------------
 #--------------------------------------------------------------------------------------------------
 echo "[+]Fuzzing For Openredirects...." 
-cat $target/recon/final-params.txt | qsreplace 'https://evil.com' | while read host do ; do curl -s -L $host  | grep "<title>Evil.Com" && echo "$host" ; done >> $target/params-vuln/open-redirects.txt
-cat  $target/params-vuln/open-redirects.txt | notify
+cat $target/recon/final-params.txt | qsreplace 'https://evil.com' | while read host do ; do curl -s -L $host  | grep "<title>Evil.Com" && echo "$host" ; done >> $target/open-redirects.txt
+cat  $target/open-redirects.txt | notify
 #--------------------------------------------------------------------------------------------------
 #-------------------------------Checking For HTMLi Injection---------------------------------------
 #--------------------------------------------------------------------------------------------------
 echo "[+]Fuzzing For HTML Injection...." 
-cat $target/recon/final-params.txt | qsreplace '"><u>hyper</u>' | tee $target/recon/htmli-test.txt && cat $target/recon/htmli-test.txt | while read host do ; do curl --silent --path-as-is --insecure "$host" | grep -qs "><u>hyper</u>" && echo "$host" ; done >> $target/params-vuln/htmli.txt
+cat $target/recon/final-params.txt | qsreplace '"><u>hyper</u>' | tee $target/recon/htmli-test.txt && cat $target/recon/htmli-test.txt | while read host do ; do curl --silent --path-as-is --insecure "$host" | grep -qs "><u>hyper</u>" && echo "$host" ; done >> $target/htmli.txt
 rm $target/recon/htmli-test.txt
-cat $target/params-vuln/htmli.txt | notify
+cat $target/htmli.txt | notify
 #--------------------------------------------------------------------------------------------------
 #-------------------------------Checking For XSS Injection-----------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -151,9 +132,9 @@ cat $target/params-vuln/htmli.txt | notify
 #--------------------------------------------------------------------------------------------------
 #-------------------------------Checking For CRLF Injection-----------------------------------------
 #--------------------------------------------------------------------------------------------------
-echo "[+]Fuzzing For CRLF Injection...." 
-crlfuzz -l $target/recon/final-params.txt -o $target/params-vuln/crlf.txt -s 
-cat $target/params-vuln/crlf.txt | notify
+#echo "[+]Fuzzing For CRLF Injection...." 
+#crlfuzz -l $target/recon/final-params.txt -o $target/params-vuln/crlf.txt -s 
+#cat $target/params-vuln/crlf.txt | notify
 #--------------------------------------------------------------------------------------------------
 #-------------------------------Checking For SQL Injection-----------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -182,17 +163,17 @@ cat $target/params-vuln/crlf.txt | notify
 #-------------------------Fuzzing Params With Nuclei ----------------------------------------------
 #--------------------------------------------------------------------------------------------------
 echo "[+]Fuzzing Params With Nuclei Fuzzing Templates..."
-cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/redirect/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/ssrf/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/xss/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/crlf/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/ssti/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/main-params.txt | nuclei -t /root/fuzzing-templates/xxe/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/main-params.txt | nuclei -t /root/fuzzing-templates/sqli/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/main-params.txt | nuclei -t /root/fuzzing-templates/cmdi/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
-cat $target/recon/main-params.txt | nuclei -t /root/fuzzing-templates/lfi/ -rl 3 -c 2 >> $target/params-vuln/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/redirect/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/ssrf/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/xss/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/crlf/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/ssti/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/xxe/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/sqli/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/cmdi/  >> $target/nuclei.txt
+cat $target/recon/final-params.txt | nuclei -t /root/fuzzing-templates/lfi/  >> $target/nuclei.txt
 echo "[+]Sending Nuclei Fuzzing Params Results To Notify" | notify
-cat $target/params-vuln/nuclei.txt | notify
+cat $target/nuclei.txt | notify
 #--------------------------------------------------------------------------------------------------
 #-------------------------------Scannning HTTP Parameter Smuggling---------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -206,36 +187,40 @@ cat $target/params-vuln/nuclei.txt | notify
 #-------------------------------------Full Scan With Nuclei----------------------------------------
 #--------------------------------------------------------------------------------------------------
 echo "[+] Full Scan With Nuclei......." 
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/cnvd/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/cves/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/default-logins/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/dns/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/exposed-panels/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/exposures/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/extra_templates/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/file/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/fuzzing/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/headless/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/helpers/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/iot/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/miscellaneous/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/network/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/osint/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/ssl/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/takeovers/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/technologies/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/token-spray/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/vulnerabilities/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/workflows/ -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/sap-redirect_nagli.yaml -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
-cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/wappalyzer-mapping.yml -rl 3 -c 2 >> $1/subs-vuln/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/cnvd/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/cves/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/default-logins/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/dns/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/exposed-panels/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/exposures/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/extra_templates/ >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/file/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/fuzzing/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/headless/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/helpers/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/iot/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/miscellaneous/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/network/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/osint/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/takeovers/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/technologies/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/token-spray/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/vulnerabilities/  >> $1/subs-vuln/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/workflows/  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/sap-redirect_nagli.yaml  >> $1/nuclei.txt
+cat $target/recon/subdomins-with-http.txt | nuclei -t /root/nuclei-templates/wappalyzer-mapping.yml >> $1/nuclei.txt
 echo "[+]Sending Nuclei Results To Notify" | notify
-cat $1/subs-vuln/nuclei.txt | grep low |  notify
-cat $1/subs-vuln/nuclei.txt | grep medium |  notify
-cat $1/subs-vuln/nuclei.txt | grep high |  notify
-cat $1/subs-vuln/nuclei.txt | grep critical |  notify
-cat $1/subs-vuln/nuclei.txt | grep unknown |  notify
-cat $1/subs-vuln/nuclei.txt | grep network |  notify
+cat $1/nuclei.txt | notify 
+
+echo "$1 Fuzzing Completed..."
+echo "XSS Found"
+cat $target/htmli.txt | wc -l
+echo "Open Redirects Found"
+cat  $target/open-redirects.txt | wc -l
+echo "Nuclei Found"
+cat $1/nuclei.txt | wc -l
+echo "Fuzzing Templates Found"
+cat $target/nuclei.txt | wc -l
 #--------------------------------------------------------------------------------------------------
 #-------------------------------------Full Scan With Nikto----------------------------------------
 #--------------------------------------------------------------------------------------------------
