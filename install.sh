@@ -15,7 +15,7 @@ sudo apt install figlet -y
 #---------------------------------------------------------------------------------------------------------------------
 #--------------------------------------Installing Go-Lang-------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------
-echo "[+] Installing Go-Lang....." | lolcat
+echo "[+] Installing Go-Lang....." 
 wget https://go.dev/dl/go1.20.3.linux-amd64.tar.gz
 mv go1.20.3.linux-amd64.tar.gz /root/
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.3.linux-amd64.tar.gz
@@ -65,7 +65,7 @@ pip3 install -r /opt/ParamSpider/requirements.txt
 #---------------------------------------------------------------------------------------------------------------------
 #--------------------------------------Installing Subs Live Checker---------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------
-echo "[+]Installing httpx........" | lolcat
+echo "[+]Installing httpx........" 
 go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 cp /root/go/bin/httpx /usr/local/bin/
 echo "[+]Installing httprobe......" | lolcat
@@ -74,11 +74,11 @@ cp /root/go/bin/httprobe /usr/local/bin/
 #---------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------Installing Sql Map---------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------
-echo "Installing Sqlmap......" |lolcat
+echo "Installing Sqlmap......" 
 git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap
 mv sqlmap /opt/
 #----------------
-echo "Installing qsreplace....." | lolcat
+echo "Installing qsreplace....." 
 go install github.com/tomnomnom/qsreplace@latest
 cp /root/go/bin/qsreplace /usr/local/bin/
 
